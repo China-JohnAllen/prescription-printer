@@ -1,0 +1,158 @@
+classDiagram
+    direction TB
+
+    %% ===== 数据模型 =====
+
+    class Medicine {
+        +number? id
+        +number? prescription_id
+        +string medicine_name
+        +string specification
+        +string dosage
+        +string usage_method
+        +string instructions
+        +number sort_order
+    }
+
+    class Prescription {
+        +number? id
+        +string prescription_no
+        +string patient_name
+        +string patient_gender
+        +string department
+        +string patient_phone
+        +string patient_address
+        +string clinical_diagnosis
+        +string prescription_date
+        +string doctor_name
+        +string doctor_department
+        +string? created_at
+    }
+
+    class PrescriptionWithMedicines {
+        +Medicines[] medicines
+    }
+
+    class PrescriptionFormData {
+        +string prescription_no
+        +string patient_name
+        +string patient_gender
+        +string department
+        +string patient_phone
+        +string patient_address
+        +string clinical_diagnosis
+        +string prescription_date
+        +string doctor_name
+        +string doctor_department
+        +Medicine[] medicines
+    }
+
+    class SavePrescriptionPayload {
+        +Prescription prescription
+        +Medicine[] medicines
+    }
+
+    class PrescriptionQueryParams {
+        +number page
+        +number pageSize
+        +string? patientName
+        +string? dateFrom
+        +string? dateTo
+    }
+
+    class PaginatedResult~T~ {
+        +T[] list
+        +number total
+        +number page
+        +number pageSize
+    }
+
+    PrescriptionWithMedicines --|> Prescription : extends
+    Prescription "1" --> "*" Medicine : contains
+    PrescriptionWithMedicines "1" --> "*" Medicine : contains
+    PrescriptionFormData "1" --> "*" Medicine : contains
+    SavePrescriptionPayload "1" --> "1" Prescription : wraps
+    SavePrescriptionPayload "1" --> "*" Medicine : wraps
+
+    %% ===== 字典常量 =====
+
+    class DEPARTMENT_OPTIONS {
+        <<const>>
+        +value: "内科" | "外科"
+        +label: string
+    }
+
+    class USAGE_METHOD_OPTIONS {
+        <<const>>
+        +value: "口服"|"输液"|"治疗"|"注射"|"雾化"|"其他"
+        +label: string
+    }
+
+    class DOCTOR_DEPARTMENT_OPTIONS {
+        <<const>>
+        +value: "内科门诊"|"外科门诊"|"预防接种科"|"体检科"
+        +label: string
+    }
+
+    %% ===== 数据库操作接口 =====
+
+    class DatabaseOperations {
+        +generatePrescriptionNo() string
+        +getNextSeq(datePrefix) number
+        +savePrescription(prescription, medicines) PrescriptionWithMedicines
+        +getPrescriptions(params) PaginatedResult
+        +getPrescriptionDetail(id) PrescriptionWithMedicines
+    }
+
+    %% ===== Electron API (preload 暴露) =====
+
+    class ElectronAPI {
+        +generatePrescriptionNo() Promise~string~
+        +getNextSeq(datePrefix) Promise~number~
+        +savePrescription(payload) Promise~PrescriptionWithMedicines~
+        +getPrescriptions(params) Promise~PaginatedResult~
+        +getPrescriptionDetail(id) Promise~PrescriptionWithMedicines~
+        +printDirect(data) Promise~void~
+    }
+
+    %% ===== Context =====
+
+    class PrescriptionContextValue {
+        +PrescriptionFormData formData
+        +setField(field, value) void
+        +addMedicine() void
+        +removeMedicine(index) void
+        +updateMedicine(index, field, value) void
+        +setPrescriptionNo(no) void
+        +loadPrescription(data) void
+        +clearForm() void
+        +resetMedicines() void
+    }
+
+    %% ===== 工具函数 =====
+
+    class FormatUtils {
+        +formatDate(date) string
+        +formatDateTime(date) string
+        +getTodayStr() string
+        +getDatePrefix() string
+        +truncate(str, maxLen) string
+        +validatePrescriptionForm(formData) ValidationResult
+    }
+
+    class ValidationResult {
+        +boolean valid
+        +string[] errors
+    }
+
+    %% ===== 关系 =====
+
+    ElectronAPI --> DatabaseOperations : invokes via IPC
+    PrescriptionContextValue --> PrescriptionFormData : manages
+    PrescriptionContextValue --> Medicine : manipulates
+    ElectronAPI --> SavePrescriptionPayload : consumes
+    ElectronAPI --> PrescriptionQueryParams : consumes
+    FormatUtils --> ValidationResult : returns
+    DEPARTMENT_OPTIONS ..> Medicine : not used directly
+    USAGE_METHOD_OPTIONS ..> Medicine : provides usage_method values
+    DOCTOR_DEPARTMENT_OPTIONS ..> Prescription : provides doctor_department values

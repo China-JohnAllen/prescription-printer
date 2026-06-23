@@ -1,0 +1,34 @@
+appId: com.healthcenter.vaccine-system
+productName: 疫苗开方系统
+copyright: Copyright © 2025 安康高新区社区卫生服务中心
+compression: maximum
+
+directories:
+  output: release
+  buildResources: build
+
+files:
+  - dist/**/*
+  - dist-electron/**/*
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+        - ia32
+  artifactName: ${productName}-${version}-${arch}-setup.${ext}
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: 疫苗开方系统
+  uninstallDisplayName: 疫苗开方系统
+
+extraResources:
+  - from: node_modules/better-sqlite3/build
+    to: better-sqlite3/build
+    filter:
+      - "**/*"

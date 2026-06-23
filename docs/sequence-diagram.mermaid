@@ -1,0 +1,112 @@
+sequenceDiagram
+    actor User as 用户（医师）
+    participant UI as PrescribePage
+    participant Ctx as PrescriptionContext
+    participant Preload as window.electronAPI
+    participant Main as Electron Main Process
+    participant DB as DatabaseOperations
+    participant Print as PrintHandler
+
+    %% ===== 场景一：保存处方 =====
+
+    rect rgb(230, 245, 255)
+        Note over User,DB: 场景1：开具并保存处方（含 V2 变更）
+
+        User->>UI: 填写患者信息（科别→下拉选择内科/外科）
+        User->>UI: 填写诊断信息（处方编号自动生成）
+        User->>UI: 添加药品（用量+用法 分两列填写）
+        User->>UI: 填写医师信息（姓名非必填，科室→下拉选择）
+        User->>UI: 点击「保存处方」
+
+        UI->>Ctx: 读取 formData
+        Ctx-->>UI: PrescriptionFormData
+
+        UI->>UI: validatePrescriptionForm(formData)
+        Note over UI: V2: doctor_name 不再校验必填
+
+        UI->>UI: 构建 SavePrescriptionPayload
+        Note over UI: medicines 每项含 usage_method
+
+        UI->>Preload: savePrescription(payload)
+        Preload->>Main: ipcMain.handle('db:save-prescription')
+        Main->>DB: savePrescription(prescription, medicines)
+        DB->>DB: BEGIN TRANSACTION
+        DB->>DB: INSERT prescriptions
+        DB->>DB: INSERT prescription_medicines (含 usage_method)
+        DB->>DB: COMMIT
+        DB-->>Main: prescriptionId
+        DB->>DB: getPrescriptionDetail(id)
+        DB-->>Main: PrescriptionWithMedicines
+        Main-->>Preload: result
+        Preload-->>UI: PrescriptionWithMedicines
+
+        UI->>Ctx: clearForm()
+        Ctx-->>UI: 重置表单（保留处方编号）
+        UI-->>User: Snackbar「处方 XXXX 保存成功」
+    end
+
+    %% ===== 场景二：打印预览 → 打印 =====
+
+    rect rgb(255, 243, 230)
+        Note over User,Print: 场景2：打印预览并确认打印（含 V2 变更）
+
+        User->>UI: 点击「打印预览」
+        UI->>UI: validatePrescriptionForm(formData)
+        UI->>UI: 构建 PrescriptionWithMedicines
+        UI->>UI: setPreviewData(data), setPreviewOpen(true)
+
+        Note over UI: PreviewDialog 渲染 A5 处方笺
+        Note over UI: 表头: 药品名称|规格|用量|用法|医嘱
+        Note over UI: V2: doctor_name 为空显示 "____________"
+
+        User->>UI: 点击「确认打印」
+        UI->>Preload: printDirect(prescriptionData)
+        Preload->>Main: ipcMain.handle('print:direct')
+        Main->>Print: createPrintWindow(data)
+        Print->>Print: generatePrescriptionHtml(data)
+        Note over Print: V2: 用量+用法 分列渲染
+        Note over Print: V2: 签名位空→"____________"
+        Note over Print: V2: CSS width:148mm 严格A5
+        Print->>Print: 创建隐藏 BrowserWindow
+        Print->>Print: loadURL(data:...html)
+        Print->>Print: webContents.print({pageSize:'A5'})
+        Note over Print: 系统打印对话框弹出
+
+        Print-->>User: 系统打印对话框（A5 纸张）
+        User->>Print: 确认打印
+        Print->>Print: 关闭隐藏窗口
+        Print-->>Main: resolve()
+        Main-->>Preload: void
+        Preload-->>UI: void
+        UI-->>User: 打印完成
+    end
+
+    %% ===== 场景三：历史查询 → 重新打印 =====
+
+    rect rgb(240, 255, 240)
+        Note over User,Print: 场景3：历史查询 — 查看详情并重新打印
+
+        User->>UI: HistoryPage 搜索/浏览
+        UI->>Preload: getPrescriptions(params)
+        Preload->>Main: ipcMain.handle('db:get-prescriptions')
+        Main->>DB: getPrescriptions(params)
+        DB-->>Main: PaginatedResult~Prescription~
+        Main-->>Preload: result
+        Preload-->>UI: 处方列表
+
+        User->>UI: 点击行 → 查看详情
+        UI->>Preload: getPrescriptionDetail(id)
+        Preload->>Main: ipcMain.handle('db:get-prescription-detail')
+        Main->>DB: getPrescriptionDetail(id)
+        DB-->>Main: PrescriptionWithMedicines (含 usage_method)
+        Main-->>Preload: detail
+        Preload-->>UI: PrescriptionWithMedicines
+
+        Note over UI: PrescriptionDetail 对话框展示
+        Note over UI: V2: 表头拆分为用量+用法
+        Note over UI: V2: doctor_name 空→"____________"
+
+        User->>UI: 点击「重新打印」
+        UI->>UI: 关闭详情，打开预览
+        Note over UI: 复用场景2的打印流程
+    end

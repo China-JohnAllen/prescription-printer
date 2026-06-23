@@ -1,0 +1,67 @@
+/**
+ * Tailwind CSS 进口指令。
+ * 使用 @tailwind 指令注入 base/components/utilities 层。
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== 全局样式 ===== */
+
+/* 全局盒模型 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  background-color: #F5F7FA;
+  color: #263238;
+  overflow: hidden;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ===== 滚动条美化 ===== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ECEFF1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #B0BEC5;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #90A4AE;
+}
+
+/* ===== 打印媒体查询（打印时隐藏 UI 元素） ===== */
+@media print {
+  body {
+    background-color: white;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
