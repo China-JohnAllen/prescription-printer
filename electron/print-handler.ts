@@ -106,11 +106,12 @@ function generatePrescriptionHtml(data: unknown): string {
       margin-right: 1mm;
     }
     .info-row .value {
-      margin-right: 8mm;
+      margin-right: 2mm;
       padding: 0 1mm;
+      min-width: 12mm;
     }
     .info-row .value.wide {
-      min-width: 50mm;
+      min-width: 45mm;
     }
     .med-divider {
       border: none;
@@ -236,6 +237,10 @@ function generatePrescriptionHtml(data: unknown): string {
       <div class="med-content">
       ${medicineBlocks}
       </div>
+    </div>
+
+    <div class="sign-lines">
+      <hr class="sign-line">
     </div>
 
     </div>
