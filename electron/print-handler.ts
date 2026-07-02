@@ -118,6 +118,15 @@ function generatePrescriptionHtml(data: unknown): string {
     }
     .med-area {
       text-align: left;
+      padding-left: 15px;
+    }
+    .rp-mark {
+      font-weight: bold;
+      font-size: 14pt;
+      margin-bottom: 2mm;
+    }
+    .med-content {
+      padding-left: 15px;
     }
     .med-block {
       margin-bottom: 4mm;
@@ -149,8 +158,16 @@ function generatePrescriptionHtml(data: unknown): string {
       border-top: 0.5px dashed #999;
       margin: 2.5mm 0;
     }
-    .footer {
+    .sign-lines {
       margin-top: auto;
+      margin-bottom: 3mm;
+    }
+    .sign-line {
+      border: none;
+      border-top: 1px solid #000;
+      margin: 2mm 0;
+    }
+    .footer {
       padding-bottom: 3mm;
       padding-top: 4mm;
       font-size: 12pt;
@@ -213,7 +230,15 @@ function generatePrescriptionHtml(data: unknown): string {
     <hr class="med-divider">
 
     <div class="med-area">
-    ${medicineBlocks}
+      <div class="rp-mark">Rp</div>
+      <div class="med-content">
+      ${medicineBlocks}
+      </div>
+    </div>
+
+    <div class="sign-lines">
+      <hr class="sign-line">
+      <hr class="sign-line">
     </div>
 
     </div>
