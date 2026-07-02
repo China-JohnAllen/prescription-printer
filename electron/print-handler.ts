@@ -99,6 +99,7 @@ function generatePrescriptionHtml(data: unknown): string {
       margin-bottom: 4mm;
       font-size: 12pt;
       line-height: 2.2;
+      padding-left: 15px;
     }
     .info-row .label {
       font-weight: bold;
@@ -172,6 +173,7 @@ function generatePrescriptionHtml(data: unknown): string {
       padding-top: 4mm;
       font-size: 12pt;
       line-height: 2;
+      padding-left: 15px;
     }
     .footer .sign-row {
       display: flex;
