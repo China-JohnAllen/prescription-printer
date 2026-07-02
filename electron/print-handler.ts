@@ -72,9 +72,10 @@ function generatePrescriptionHtml(data: unknown): string {
       margin-bottom: 2mm;
     }
     .header .hospital {
-      font-size: 15pt;
+      font-size: 24px;
       font-weight: bold;
       letter-spacing: 2pt;
+      padding-top: 15px;
       margin-bottom: 1.5mm;
     }
     .header .title {
@@ -105,8 +106,6 @@ function generatePrescriptionHtml(data: unknown): string {
     }
     .info-row .value {
       margin-right: 8mm;
-      border-bottom: 1px solid #000;
-      min-width: 30mm;
       padding: 0 1mm;
     }
     .info-row .value.wide {
@@ -165,7 +164,6 @@ function generatePrescriptionHtml(data: unknown): string {
     .footer .sign-item {
       min-width: 50mm;
       padding: 0 2mm;
-      border-bottom: 1px solid #000;
     }
     @media print {
       body { padding: 0; }
@@ -196,18 +194,18 @@ function generatePrescriptionHtml(data: unknown): string {
       <span class="value">${escapeHtml(String(prescription.patient_gender ?? ''))}</span>
       <span class="label">年龄：</span>
       <span class="value">${escapeHtml(String(prescription.patient_age ?? ''))}</span>
-      <span class="label">科别：</span>
-      <span class="value">${escapeHtml(String(prescription.department ?? ''))}</span>
+      <span class="label">电话：</span>
+      <span class="value">${escapeHtml(String(prescription.patient_phone ?? ''))}</span>
     </div>
 
     <div class="info-row">
+      <span class="label">科别：</span>
+      <span class="value">${escapeHtml(String(prescription.department ?? ''))}</span>
       <span class="label">临床诊断：</span>
       <span class="value wide">${escapeHtml(String(prescription.clinical_diagnosis ?? ''))}</span>
     </div>
 
     <div class="info-row">
-      <span class="label">电话：</span>
-      <span class="value">${escapeHtml(String(prescription.patient_phone ?? ''))}</span>
       <span class="label">住址：</span>
       <span class="value wide">${escapeHtml(String(prescription.patient_address ?? ''))}</span>
     </div>
