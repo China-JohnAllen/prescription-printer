@@ -238,11 +238,6 @@ function generatePrescriptionHtml(data: unknown): string {
       </div>
     </div>
 
-    <div class="sign-lines">
-      <hr class="sign-line">
-      <hr class="sign-line">
-    </div>
-
     </div>
 
     <div class="footer">
