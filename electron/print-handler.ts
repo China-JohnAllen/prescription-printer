@@ -194,6 +194,8 @@ function generatePrescriptionHtml(data: unknown): string {
       <span class="value">${escapeHtml(String(prescription.patient_name ?? ''))}</span>
       <span class="label">性别：</span>
       <span class="value">${escapeHtml(String(prescription.patient_gender ?? ''))}</span>
+      <span class="label">年龄：</span>
+      <span class="value">${escapeHtml(String(prescription.patient_age ?? ''))}</span>
       <span class="label">科别：</span>
       <span class="value">${escapeHtml(String(prescription.department ?? ''))}</span>
     </div>

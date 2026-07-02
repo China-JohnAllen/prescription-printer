@@ -104,18 +104,18 @@ const initState: PrescriptionFormData = {
   clinical_diagnosis: '预防措施',
   prescription_date: '2025-07-22',
   doctor_name: '李医生',
-  doctor_department: '中医科',
-  medicines: [
-    {
-      medicine_name: '阿莫西林',
-      specification: '0.25g×24',
-      dosage: '每日3次，每次1片',
-      usage_method: '口服',
-      instructions: '饭后服用',
-      sort_order: 0,
-    },
-  ],
-};
+    doctor_department: '中医科门诊',
+    medicines: [
+      {
+        medicine_name: '乙肝疫苗(CHO)',
+        specification: '20μg/1.0ml/支',
+        dosage: '1支',
+        usage_method: '肌内注射',
+        instructions: '饭后服用',
+        sort_order: 0,
+      },
+    ],
+  };
 
 describe('prescriptionReducer', () => {
   // ---- SET_FIELD ----
@@ -227,10 +227,10 @@ describe('prescriptionReducer', () => {
         type: 'UPDATE_MEDICINE',
         index: 0,
         field: 'usage_method',
-        value: '输液',
+        value: '皮下注射',
       };
       const result = prescriptionReducer(initState, action);
-      expect(result.medicines[0].usage_method).toBe('输液');
+      expect(result.medicines[0].usage_method).toBe('皮下注射');
     });
   });
 
@@ -319,23 +319,23 @@ describe('prescriptionReducer', () => {
         clinical_diagnosis: '感冒',
         prescription_date: '2025-06-15',
         doctor_name: '赵医生',
-        doctor_department: '儿科',
+        doctor_department: '儿科门诊',
         created_at: '2025-06-15 10:30:00',
         medicines: [
           {
             id: 10,
-            medicine_name: '布洛芬',
-            specification: '0.2g×10',
-            dosage: '每日2次，每次1片',
-            usage_method: '口服',
+            medicine_name: '水痘疫苗',
+            specification: '0.5ml/瓶',
+            dosage: '1支',
+            usage_method: '皮下注射',
             instructions: '发热时服用',
             sort_order: 0,
           },
           {
             id: 11,
-            medicine_name: '维生素C',
-            specification: '100mg×30',
-            dosage: '每日1次，每次1片',
+            medicine_name: '轮状病毒疫苗',
+            specification: '3.0ml/瓶',
+            dosage: '1支',
             usage_method: '口服',
             instructions: '',
             sort_order: 1,
@@ -358,7 +358,7 @@ describe('prescriptionReducer', () => {
       expect(result.clinical_diagnosis).toBe('感冒');
       expect(result.prescription_date).toBe('2025-06-15');
       expect(result.doctor_name).toBe('赵医生');
-      expect(result.doctor_department).toBe('儿科');
+      expect(result.doctor_department).toBe('儿科门诊');
       expect(result.medicines).toHaveLength(2);
     });
 
@@ -380,7 +380,7 @@ describe('prescriptionReducer', () => {
             medicine_name: '药A',
             specification: '',
             dosage: '',
-            usage_method: '输液',
+            usage_method: '肌内注射',
             instructions: '',
             sort_order: 0,
           },
@@ -392,7 +392,7 @@ describe('prescriptionReducer', () => {
         data: preset,
       };
       const result = prescriptionReducer(initState, action);
-      expect(result.medicines[0].usage_method).toBe('输液');
+      expect(result.medicines[0].usage_method).toBe('肌内注射');
     });
 
     it('加载时应该保留药品的 sort_order', () => {

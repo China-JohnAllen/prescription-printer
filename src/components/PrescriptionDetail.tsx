@@ -227,13 +227,13 @@ export default function PrescriptionDetail({
                 </Box>
                 {/* 第二行：用量、用法、医嘱 */}
                 <Box display="flex" gap={4} pl={1}>
-                  <Typography variant="body2" fontSize="13px" lineHeight={2.0}>
+                  <Typography variant="body2" fontSize="16px" lineHeight={2.0}>
                     <strong>用量：</strong>{med.dosage || '-'}
                   </Typography>
-                  <Typography variant="body2" fontSize="13px" lineHeight={2.0}>
+                  <Typography variant="body2" fontSize="16px" lineHeight={2.0}>
                     <strong>用法：</strong>{med.usage_method || '-'}
                   </Typography>
-                  <Typography variant="body2" fontSize="13px" lineHeight={2.0}>
+                  <Typography variant="body2" fontSize="16px" lineHeight={2.0}>
                     <strong>医嘱：</strong>{med.instructions || '-'}
                   </Typography>
                 </Box>
