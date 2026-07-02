@@ -96,9 +96,9 @@ function generatePrescriptionHtml(data: unknown): string {
     .info-row {
       display: flex;
       flex-wrap: wrap;
-      margin-bottom: 4mm;
+      margin-bottom: 2mm;
       font-size: 12pt;
-      line-height: 2.2;
+      line-height: 1.5;
       padding-left: 15px;
     }
     .info-row .label {
@@ -131,9 +131,9 @@ function generatePrescriptionHtml(data: unknown): string {
       padding-left: 15px;
     }
     .med-block {
-      margin-bottom: 4mm;
+      margin-bottom: 2mm;
       font-size: 12pt;
-      line-height: 2.0;
+      line-height: 1.5;
       text-align: left;
     }
     .med-row-name {
@@ -173,7 +173,7 @@ function generatePrescriptionHtml(data: unknown): string {
       padding-bottom: 3mm;
       padding-top: 4mm;
       font-size: 12pt;
-      line-height: 2;
+      line-height: 1.5;
       padding-left: 15px;
     }
     .footer .sign-row {

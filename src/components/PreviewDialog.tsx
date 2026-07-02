@@ -144,96 +144,109 @@ export default function PreviewDialog({
           </Box>
 
           {/* 内容区域 — 固定顶部间距 */}
-          <Box flex={1} display="flex" flexDirection="column">
+          <Box flex={1} display="flex" flexDirection="column" pl={1}>
 
           {/* 处方编号 + 日期 */}
-          <Box display="flex" justifyContent="space-between" mb={1} mr={'5px'}>
-            <Typography variant="body2" fontSize="16px" lineHeight={2.2}>
+          <Box display="flex" justifyContent="space-between" mb={0.8}>
+            <Typography variant="body2" fontSize="15px" lineHeight={1.5}>
               <strong>处方编号：</strong>
               {prescription.prescription_no}
             </Typography>
-            <Typography variant="body2" fontSize="16px" lineHeight={2.2}>
+            <Typography variant="body2" fontSize="15px" lineHeight={1.5}>
               <strong>开具日期：</strong>
               {prescription.prescription_date}
             </Typography>
           </Box>
 
-          {/* 患者信息 */}
-          <Box display="flex" flexWrap="wrap" gap={2} mb={1} mr={'5px'}>
-            <Typography variant="body2" fontSize="16px" lineHeight={2.2}>
+          {/* 患者信息：姓名、性别、年龄、电话 */}
+          <Box display="flex" flexWrap="wrap" columnGap={1.5} mb={0.5}>
+            <Typography variant="body2" fontSize="15px" lineHeight={1.5}>
               <strong>姓名：</strong>
               {prescription.patient_name}
             </Typography>
-            <Typography variant="body2" fontSize="16px" lineHeight={2.2}>
+            <Typography variant="body2" fontSize="15px" lineHeight={1.5}>
               <strong>性别：</strong>
               {prescription.patient_gender}
             </Typography>
-            <Typography variant="body2" fontSize="16px" lineHeight={2.2}>
+            <Typography variant="body2" fontSize="15px" lineHeight={1.5}>
               <strong>年龄：</strong>
               {prescription.patient_age || '-'}
             </Typography>
-            <Typography variant="body2" fontSize="16px" lineHeight={2.2}>
-              <strong>科别：</strong>
-              {prescription.department}
-            </Typography>
-          </Box>
-
-          {/* 诊断 */}
-          <Typography variant="body2" fontSize="16px" mb={1} lineHeight={2.2} mr={'5px'}>
-            <strong>临床诊断：</strong>
-            {prescription.clinical_diagnosis}
-          </Typography>
-
-          {/* 联系方式 */}
-          <Box display="flex" flexWrap="wrap" gap={2} mb={'15px'} mr={'5px'}>
-            <Typography variant="body2" fontSize="16px" lineHeight={2.2}>
+            <Typography variant="body2" fontSize="15px" lineHeight={1.5}>
               <strong>电话：</strong>
               {prescription.patient_phone || '-'}
             </Typography>
-            <Typography variant="body2" fontSize="16px" lineHeight={2.2}>
+          </Box>
+
+          {/* 科别 + 临床诊断 */}
+          <Box display="flex" flexWrap="wrap" columnGap={1.5} mb={0.5}>
+            <Typography variant="body2" fontSize="15px" lineHeight={1.5}>
+              <strong>科别：</strong>
+              {prescription.department}
+            </Typography>
+            <Typography variant="body2" fontSize="15px" lineHeight={1.5}>
+              <strong>临床诊断：</strong>
+              {prescription.clinical_diagnosis}
+            </Typography>
+          </Box>
+
+          {/* 住址 */}
+          <Box display="flex" flexWrap="wrap" columnGap={1.5} mb={1.5}>
+            <Typography variant="body2" fontSize="15px" lineHeight={1.5}>
               <strong>住址：</strong>
               {prescription.patient_address || '-'}
             </Typography>
           </Box>
 
-          {/* 分隔线 + 药品明细 — 无表头，两行显示 */}
+          {/* 分隔线 */}
           <Divider sx={{ mt: 0, mb: 2, borderColor: '#000' }} />
 
-          {medicines.map((med, idx) => (
-            <Box key={idx} mb={2}>
-              {/* 第一行：药品名称 + 规格 */}
-              <Box display="flex" gap={1} mb={0.8}>
-                <Typography variant="body2" fontWeight="bold" fontSize="18px">
-                  {med.medicine_name}
-                </Typography>
-                <Typography variant="body2" fontSize="16px">
-                  {med.specification || '-'}
-                </Typography>
+          {/* 药品明细 */}
+          <Box pl={1}>
+            <Typography variant="body2" fontWeight="bold" fontSize="16px" mb={0.5}>
+              Rp
+            </Typography>
+            <Box pl={1.5}>
+            {medicines.map((med, idx) => (
+              <Box key={idx} mb={2}>
+                {/* 第一行：药品名称 + 规格 */}
+                <Box display="flex" gap={1} mb={0.5}>
+                  <Typography variant="body2" fontWeight="bold" fontSize="16px">
+                    {med.medicine_name}
+                  </Typography>
+                  <Typography variant="body2" fontSize="15px">
+                    {med.specification || '-'}
+                  </Typography>
+                </Box>
+                {/* 第二行：用量、用法、医嘱 */}
+                <Box display="flex" columnGap={3} pl={0.5}>
+                  <Typography variant="body2" fontSize="15px" lineHeight={1.5}>
+                    <strong>用量：</strong>{med.dosage || '-'}
+                  </Typography>
+                  <Typography variant="body2" fontSize="15px" lineHeight={1.5}>
+                    <strong>用法：</strong>{med.usage_method || '-'}
+                  </Typography>
+                  <Typography variant="body2" fontSize="15px" lineHeight={1.5}>
+                    <strong>医嘱：</strong>{med.instructions || '-'}
+                  </Typography>
+                </Box>
+                {/* 药品间虚线分隔 */}
+                {idx < medicines.length - 1 && (
+                  <Divider sx={{ mt: 1, borderStyle: 'dashed', borderColor: '#ccc' }} />
+                )}
               </Box>
-              {/* 第二行：用量、用法、医嘱 */}
-              <Box display="flex" gap={4} pl={1}>
-                <Typography variant="body2" fontSize="16px" lineHeight={2.0}>
-                  <strong>用量：</strong>{med.dosage || '-'}
-                </Typography>
-                <Typography variant="body2" fontSize="16px" lineHeight={2.0}>
-                  <strong>用法：</strong>{med.usage_method || '-'}
-                </Typography>
-                <Typography variant="body2" fontSize="16px" lineHeight={2.0}>
-                  <strong>医嘱：</strong>{med.instructions || '-'}
-                </Typography>
-              </Box>
-              {/* 药品间虚线分隔 */}
-              {idx < medicines.length - 1 && (
-                <Divider sx={{ mt: 1.5, borderStyle: 'dashed', borderColor: '#ccc' }} />
-              )}
+            ))}
             </Box>
-          ))}
+          </Box>
 
           </Box>
 
+          {/* 签名横线 */}
+          <Divider sx={{ mb: 1.5, borderColor: '#000' }} />
+
           {/* 医师签名 — 固定在底部 */}
-          <Box display="flex" justifyContent="space-between" mt="auto" pb={2} pt={2}>
-            <Typography variant="body2">
+          <Box display="flex" justifyContent="space-between" mt="auto" pb={1} pt={1}>
+            <Typography variant="body2" fontSize="15px">
               <strong>医师：</strong>
               <Box
                 component="span"
@@ -247,12 +260,11 @@ export default function PreviewDialog({
                 {doctorNameDisplay}
               </Box>
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body2" fontSize="15px">
               <strong>科室：</strong>
               <Box
                 component="span"
                 sx={{
-                  borderBottom: '1px solid #000',
                   minWidth: 80,
                   display: 'inline-block',
                   ml: 1,
